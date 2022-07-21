@@ -5,13 +5,17 @@ description = ""
 authors = ["Xewus <xewuss@yandex.ru>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 mysqlclient = "^2.1.1"
 Django = "^4.0.6"
+uWSGI = "^2.0.20"
+python-decouple = "^3.6"
+daphne = "^3.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 ipython = "^8.4.0"
+uwsgitop = "^0.11"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
