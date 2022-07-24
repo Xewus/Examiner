@@ -9,6 +9,9 @@ def test_version():
 
 
 class TestFrame:
+    """Проверяет расположение папок и файлов,
+    необходимых для работы приложения.
+    """
     current_dir = Path.cwd()
     app_dir = current_dir / 'src/app/'
 

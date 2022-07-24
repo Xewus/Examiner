@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Страница {{ path }} не найдена{% endblock %}
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-12">
+      <img src={% static 'img/404_ERROR.jpg' %}>
+    </div>
+  </div>
+
+{% endblock %}

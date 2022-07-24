@@ -11,9 +11,10 @@ Django = "^4.0.6"
 uWSGI = "^2.0.20"
 python-decouple = "^3.6"
 daphne = "^3.0.2"
+requests = "^2.28.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.1"
 ipython = "^8.4.0"
 uwsgitop = "^0.11"
 
