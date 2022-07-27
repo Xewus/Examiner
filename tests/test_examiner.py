@@ -1,4 +1,5 @@
 from pathlib import Path
+import pytest
 from src import __version__
 from src.app.examiner import settings
 from . import fail_messages
@@ -49,3 +50,24 @@ class TestFrame:
         assert Path(self.app_dir / 'questions/').exists(), (
             fail_messages.FAIL_DIR_QUESTIONS
         )
+
+
+class TestAppSettings:
+    """Проверяет настройки приложения.
+    """
+    @pytest.mark.skip
+    def test_debug(self):
+        assert not settings.DEBUG, fail_messages.FAIL_DEBUG
+
+    def test_secret_key(self):
+        assert settings.SECRET_KEY, fail_messages.FAIL_SECRET_KEY
+
+    @pytest.mark.skipif(settings.DEBUG, reason='Using `DEBUG`')
+    def test_db(self):
+        default_db = settings.DATABASES['default']
+        assert default_db['ENGINE'] == 'django.db.backends.sqlite3', (
+            fail_messages.FAIL_DB_ENGINE
+        )
+        assert default_db['USER'], fail_messages.FAIL_DB_USER
+        assert default_db['DB_PASS'], fail_messages.FAIL_DB_PASSWORD
+        assert default_db['HOST'], fail_messages.FAIL_DB_HOST
