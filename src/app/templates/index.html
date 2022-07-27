@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-{% block header %}Что здесь происходит?{% endblock %}
-{% block content %}
-  <div class="container">
-
-    {% include "includes/menu.html" with index=True %}
-    {{1}}
-
-  </div>
-{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+{% block header %}{{ header }}{% endblock %}
+{% block card_header %}{{ text }}{% endblock card_header %}
+{% block form %}
+  <h5 style="display: flex; justify-content: center">Доступный максимум баллов: {{ maximum }}</h5>
+  <h6 style="display: flex; justify-content: center">{{ greeting|linebreaks }}</h6>
+  <br>
+  <h4 style="display: flex; justify-content: center" >
+    <a class="p-2 text-dark" href="{% url 'questions:questions' %}">Впердё</a>
+  </h4>
+{% endblock form %}

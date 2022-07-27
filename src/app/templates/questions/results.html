@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block card_header %}{{ header }}{% endblock card_header %}
+{% block form %}
+<div style="display: flex; justify-content: center" >
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Набранные баллы</th>
+        <th scope="col">Юзернейм</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in results %}
+        {% if result.amount is not None %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ result.amount }}</td>
+            <td>{{ result.username }}
+          </tr>
+        {% endif %}
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
+{% endblock form %}

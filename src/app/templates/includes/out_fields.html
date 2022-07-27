@@ -10,7 +10,6 @@
       {% endif %}
     </label>
     <div class="col-md-6">
-      {# подключаем фильтр и указываем класс #}
       {{ field|addclass:"form-control" }}
       {% if field.help_text %}
         <small
@@ -21,4 +20,10 @@
       {% endif %}
     </div>
   </div>
+  <br>
 {% endfor %}
+<div class="col-md-6 offset-md-4">
+  <button type="submit" class="btn btn-primary">
+    {% block button %}{{submit}}{% endblock %}
+  </button>
+</div>

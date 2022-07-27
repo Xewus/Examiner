@@ -1,52 +1,41 @@
-<!DOCTYPE html> <!-- Используется html 5 версии -->
-<html lang="ru"> <!-- Язык сайта - русский -->
+<!DOCTYPE html>
+<html lang="ru">
 {% load static %}
   <head>
-    <!-- Загрузка статики -->
-    {% load static %}
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>
-      {% block title %}Проверь свого Питона!{% endblock %}
-    </title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-      crossorigin="anonymous"
-    >
+    <meta name="viewport" content="viewport" content="width=980px, initial-scale=10.0">
+    <title>{% block title %}Титле{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   </head>
 
   <body>
-    <div>
-     {% include 'includes/nav.html' %}
+    <div style= 'background-image: linear-gradient(to top, #32CD32 0%, #008000 100%);'>
+      {% include 'includes/nav.html' %}
       <main>
-        <div
-          class="bg-image"
-          style="
-            background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
-            height: 100vh;
-          "
-        >
-          <div class="mask h-100" style="background-color: rgba(0, 0, 0, 0.6);">
-            <h1 class="text-white text-center mb-0">{% block header %}Где хэдер?{% endblock %}</h1>
-            {% block content %}
-              No content
-            {% endblock content %}
-          </div>
+        <div class="container">
+          {% block header %}{% endblock header %}
+          {% load user_filters %}
+          {% block content %}
+            <div class="row justify-content-center">
+              <div class="col-md-8 p-5">
+                {% include 'includes/menu.html' %}
+                <div class="card">
+                  <div class="card-header" style="display: flex; justify-content: center">
+                    {% block card_header %}{% endblock card_header %}
+                  </div>
+                    <div class="card-body">
+                    {% block form %}
+                    {% endblock form %}
+                    </div> <!-- card body -->
+                  </div> <!-- card -->
+                </div> <!-- col -->
+            </div> <!-- row -->
+          {% endblock content %}
         </div>
       </main>
       {% include 'includes/footer.html' %}
     </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-      crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
   </body>
 </html>
-
-
-
-
-
-

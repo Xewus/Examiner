@@ -27,16 +27,19 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
 
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
-    'python_questions.apps.PythonQuestionsConfig',
-    'questions.apps.QuestionsConfig',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'questions.apps.QuestionsConfig',
+    'users.apps.UsersConfig',
+    'core.apps.CoreConfig',
+
+    'django_extensions',
+    'django.db.backends',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'src.app.utils.context_processors.year'
+                'src.app.core.context_processors.year'
             ],
         },
     },
@@ -124,3 +127,30 @@ LOGIN_URL = '/auth/login/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'questions:index'
+LOGOUT_REDIRECT_URL = 'https://www.youtube.com/watch?v=IA_evL-1F0w'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console', ],
+        },
+    }
+}
+
+if not DEBUG:
+    LOGGING = None
