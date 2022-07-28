@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib import admin
 
 from .models import Answer, Question, Result
@@ -26,7 +25,7 @@ class AnswerAdmin(admin.ModelAdmin):
 class ResultsAdmin(admin.ModelAdmin):
     list_display = (
         'users',
-        'amount',
+        'score',
         'finish_test_time'
     )
     search_fields = (

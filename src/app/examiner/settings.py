@@ -20,11 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-SECRET_KEY = config('SECRET_KEY', default=None)
+SECRET_KEY = config('SECRET_KEY', default='debug')
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=1, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'src.app.core.context_processors.year'
+                'core.context_processors.year'
             ],
         },
     },
@@ -82,10 +82,10 @@ DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
         'NAME': config('DB_NAME', default='db.sqlite3'),
-        'USER': config('DB_USER', default=None),
-        'PASSWORD': config('DB_PASS', default=None),
-        'HOST': config('DB_HOST', default=None),
-        'PORT': config('DB_PORT', default=5432, cast=int)
+        # 'USER': config('DB_USER', default=None),
+        # 'PASSWORD': config('DB_PASS', default=None),
+        # 'HOST': config('DB_HOST', default=None),
+        # 'PORT': config('DB_PORT', default=5432, cast=int)
     }
 }
 

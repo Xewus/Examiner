@@ -6,7 +6,7 @@ from . import fail_messages
 
 
 def test_version():
-    assert __version__ == '0.1.0', fail_messages.FAIL_APP_VERSION
+    assert __version__ == '1.0.0', fail_messages.FAIL_APP_VERSION
 
 
 class TestFrame:

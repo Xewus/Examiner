@@ -97,7 +97,7 @@ class Result(models.Model):
         null=True,
         blank=True
     )
-    amount = models.SmallIntegerField(
+    score = models.SmallIntegerField(
         verbose_name='Сумма баллов',
         null=True,
         blank=True
@@ -109,4 +109,4 @@ class Result(models.Model):
         ordering = ('-finish_test_time',)
 
     def __str__(self) -> str:
-        return f'Результат {self.users}: {self.amount}'
+        return f'Результат {self.users}: {self.score}'

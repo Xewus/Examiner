@@ -3,7 +3,7 @@
 {% block card_header %}{{ header }}{% endblock card_header %}
 {% block form %}
   <div style="display: flex; justify-content: center">
-    Ваш результат: {{ result.amount }}<br>
+    Ваш результат: {{ result.score }}<br>
   </div>
   <a class="p-2 text-dark" style="display: flex; justify-content: center" href="{% url 'questions:questions' %}">Повторить</a>
 {% endblock form %}
