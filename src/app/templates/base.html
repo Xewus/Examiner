@@ -9,7 +9,13 @@
   </head>
 
   <body>
-    <div style= 'background-image: linear-gradient(to top, #32CD32 0%, #008000 100%);'>
+    <div
+      class="bg-image"
+      style="
+        background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/99.webp');
+        height: 100vh;
+      "
+    ><!-- Background image -->
       {% include 'includes/nav.html' %}
       <main>
         <div class="container">
@@ -23,19 +29,17 @@
                   <div class="card-header" style="display: flex; justify-content: center">
                     {% block card_header %}{% endblock card_header %}
                   </div>
-                    <div class="card-body">
+                  <div class="card-body">
                     {% block form %}
                     {% endblock form %}
-                    </div> <!-- card body -->
-                  </div> <!-- card -->
-                </div> <!-- col -->
+                  </div> <!-- card body -->
+                </div> <!-- card -->
+              </div> <!-- col -->
             </div> <!-- row -->
           {% endblock content %}
-        </div>
+        </div><!-- container-->
       </main>
-      {% include 'includes/footer.html' %}
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+    </div><!-- Background image -->
+    {% include 'includes/footer.html' %}
   </body>
 </html>
