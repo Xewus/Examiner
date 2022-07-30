@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block header %}{{ header }}{% endblock %}
-{% block card_header %}{{ text }}{% endblock card_header %}
+{% block card_header %}{{ card_header }}{% endblock card_header %}
 {% block form %}
-  <h5 style="display: flex; justify-content: center">Доступный максимум баллов: {{ maximum }}</h5>
-  <h6 style="display: flex; justify-content: center">{{ greeting|linebreaks }}</h6>
+  <h5 style="display: flex; justify-content: center">Доступный максимум баллов: {{ maximum_grade }}</h5>
+  <h6 style="display: flex; justify-content: center">{{ index_page_text|linebreaks }}</h6>
   <br>
   <h4 style="display: flex; justify-content: center" >
-    <a class="p-2 text-dark" href="{% url 'questions:questions' %}">Впердё</a>
+    <a class="p-2 text-dark" href="{% url 'questions:questions' %}">Вперёд >></a>
   </h4>
 {% endblock form %}

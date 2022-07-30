@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.shortcuts import redirect, render
+from django.views.decorators.cache import cache_page
 
 from core.db_queries import Query
 from core import constants as const
@@ -8,24 +9,26 @@ from core import constants as const
 from .models import Result
 
 
+@cache_page(timeout=20, key_prefix='index')  # 10 minutes
 def index(request):
     """Обработчик для главной страницы.
     """
     context = {
         'title': const.TITLE,
-        'greeting': const.GREETING_TEXT,
-        'maximum': Query.get_naximum_grade(),
-        'text': const.INDEX_PAGE_TEXT
+        'card_header': const.INDEX_CARD_HEADER,
+        'index_page_text': const.INDEX_PAGE_TEXT,
+        'maximum_grade': Query.get_maximum_grade(),
     }
     return render(request, 'index.html', context)
 
 
+@cache_page(timeout=60, key_prefix='rating')  # 1 minute
 def rating(request):
     """Показывает рейтинг пользователей.
     """
     context = {
         'title': const.TITLE,
-        'header': const.ALL_RESULTS_HEADER,
+        'header': const.ALL_RESULTS_CARD_HEADER,
         'results': Query.get_users_ratings()
     }
     return render(request, 'questions/results.html', context)
@@ -37,8 +40,8 @@ def my_results(request):
     """
     context = {
         'title': const.TITLE,
-        'header': const.MY_RESULTS_HEADER,
-        'results': Query.get_user_results()
+        'header': const.MY_RESULTS_CARD_HEADER,
+        'results': Query.get_user_results(request.user.id)
     }
     return render(request, 'questions/results.html', context)
 
@@ -50,7 +53,8 @@ def get_question(
     """Выводит очередной вопрос и учитывает ответы.
     Если предыдущий тест был случайно прерван, продолжит предыдущий тест.
     """
-    next_question = Query.get_next_question(request.user, current_result)
+    next_question, current_result = Query.get_next_question(request.user.id, current_result)
+    print(next_question, '\n\n')
 
     if not next_question:
         return to_finish_test(request, current_result)
@@ -90,7 +94,7 @@ def add_answer(request, result, question_id):
     return get_question(request, result, to_add_answer=False)
 
 
-@login_required
+# @login_required
 def to_finish_test(request, result=None):
     """Завершает тест.
     Если пользователь не проходил тестов, либо пытается завершить без
@@ -104,7 +108,7 @@ def to_finish_test(request, result=None):
             users=request.user
         ).order_by('-id').first()
 
-    if result is None or not result.answers.all():
+    if result is None or result.score is None:
         return redirect('questions:index')
 
     if not result.finish_test_time:
@@ -115,7 +119,7 @@ def to_finish_test(request, result=None):
 
     context = {
         'title': const.TITLE,
-        'header': const.FINISH_HEADER,
+        'header': const.FINISH_CARD_HEADER,
         'result': result
     }
     return render(request, 'questions/finish.html', context)

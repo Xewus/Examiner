@@ -14,6 +14,7 @@ from pathlib import Path
 
 from decouple import config, Csv
 
+APP_NAME = 'examiner'
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
 
     'django_extensions',
-    'django.db.backends',
+    'django.db.backends'
 ]
 
 MIDDLEWARE = [
@@ -49,10 +50,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
-ROOT_URLCONF = 'examiner.urls'
+ROOT_URLCONF = f'{APP_NAME}.urls'
 
 TEMPLATES_DIR = BASE_DIR / 'templates'
 TEMPLATES = [
@@ -72,8 +73,8 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'examiner.asgi.application'
-WSGI_APPLICATION = 'examiner.wsgi.application'
+ASGI_APPLICATION = f'{APP_NAME}.asgi.application'
+WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -86,6 +87,17 @@ DATABASES = {
         # 'PASSWORD': config('DB_PASS', default=None),
         # 'HOST': config('DB_HOST', default=None),
         # 'PORT': config('DB_PORT', default=5432, cast=int)
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / f'{APP_NAME}.cache',
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'MAX_ENTRIES': 50
+        }
     }
 }
 

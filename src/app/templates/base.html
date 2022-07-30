@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 {% load static %}
+{% load cache %}
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="viewport" content="width=980px, initial-scale=10.0">
@@ -16,7 +18,9 @@
         height: 100vh;
       "
     ><!-- Background image -->
-      {% include 'includes/nav.html' %}
+      {% cache 3600 navbar %}  <!-- 1 hour-->
+        {% include 'includes/nav.html' %}
+      {% endcache %}
       <main>
         <div class="container">
           {% block header %}{% endblock header %}
@@ -40,6 +44,8 @@
         </div><!-- container-->
       </main>
     </div><!-- Background image -->
-    {% include 'includes/footer.html' %}
+    {% cache 3600 footer %}  <!-- 1 hour-->
+      {% include 'includes/footer.html' %}
+    {% endcache %}
   </body>
 </html>

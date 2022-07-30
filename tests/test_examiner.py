@@ -32,7 +32,7 @@ class TestFrame:
         )
 
     def test_start_app_file(self):
-        assert Path(self.current_dir / 'src/start_app.py').exists(), (
+        assert Path(self.current_dir / 'start_app.py').exists(), (
             fail_messages.FAIL_START_APP_FILE
         )
 

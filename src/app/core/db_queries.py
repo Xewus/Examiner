@@ -1,5 +1,8 @@
+"""Запросы к БД.
+"""
 from datetime import datetime
 
+from django.core.cache import cache
 from django.db.models import F, Max, Q, Sum
 
 from questions.models import Answer, Question, Result, User
@@ -8,14 +11,20 @@ from questions.models import Answer, Question, Result, User
 class Query:
     """Сборник запросов к БД.
     """
-    def get_naximum_grade():
+    def get_maximum_grade():
         """Получет максимальный доступный балл.
         """
-        return Answer.objects.filter(
+        maximum_grade = cache.get('maximum_grade')
+
+        if maximum_grade is None:
+            maximum_grade = Answer.objects.filter(
                 grade__gt=0
             ).aggregate(
                 Sum('grade')
             )['grade__sum']
+            cache.set('maximum_grade', maximum_grade, 60 * 60 * 24 * 365)
+
+        return maximum_grade
 
     def get_users_ratings():
         """Получает рейтинг пользователей.
@@ -48,12 +57,12 @@ class Query:
     def get_current_result(user):
         """Получает последний незакрытый тест либо создаёт новый.
         """
-        result = Query.get_last_open_result(user)
-        if not result:
-            result = Result.objects.create(users=user)
-        return result
+        current_result = Query.get_last_open_result(user)
+        if not current_result:
+            current_result = Result.objects.create(users=user)
+        return current_result
 
-    def get_next_question(user, current_result):
+    def get_next_question(user, current_result) -> tuple:
         """Получает следующий вопрос.
         """
         if current_result is None:
@@ -66,9 +75,12 @@ class Query:
         else:
             last_question_id = 0
 
-        return Question.objects.filter(id__gt=last_question_id).first()
+        return (
+            Question.objects.filter(id__gt=last_question_id).first(),
+            current_result
+        )
 
-    def update_result(result, question_id, choice) -> bool:
+    def update_result(current_result, question_id, choice) -> bool:
         """Проверяет, что ответы соответствуют вопросу.
         Если соответствут, обновляет результат.
         """
@@ -80,17 +92,17 @@ class Query:
         if not answers:
             return False
 
-        result.answers.add(*answers)
+        current_result.answers.add(*answers)
         return True
 
-    def close_last_result(self, result):
+    def close_last_result(self, current_result):
         """Закрывает тест с указанием времени закрытия и
         проставлением суммы набранных баллов.
         """
-        score = result.answers.aggregate(Sum('grade'))['grade__sum']
+        score = current_result.answers.aggregate(Sum('grade'))['grade__sum']
         if score is None:
             score = 0
-        result.score = score
-        result.finish_test_time = datetime.now()
-        result.save()
+        current_result.score = score
+        current_result.finish_test_time = datetime.now()
+        current_result.save()
         return None

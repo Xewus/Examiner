@@ -6,7 +6,7 @@ from subprocess import run
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-ENV_PATH = os.path.join(current_dir, 'app/')
+ENV_PATH = os.path.join(current_dir, 'src/app/')
 
 set_env_path = 'export PYTHONPATH=${PYTHONPATH}:%s' % ENV_PATH
 
