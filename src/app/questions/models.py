@@ -110,3 +110,7 @@ class Result(models.Model):
 
     def __str__(self) -> str:
         return f'Результат {self.users}: {self.score}'
+
+
+class Python(Question):
+    pass

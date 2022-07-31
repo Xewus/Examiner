@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Answer, Question, Result
+from .models import Answer, Python, Result
 
 
 class AnswerInline(admin.TabularInline):
@@ -36,7 +36,7 @@ class ResultsAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Question)
+@admin.register(Python)
 class QuestionAdmin(admin.ModelAdmin):
     # def get_form(self, request, obj=None, **kwargs):
     #     kwargs['widgets'] = {'text': forms.Textarea}

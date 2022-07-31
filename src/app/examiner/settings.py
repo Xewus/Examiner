@@ -164,5 +164,5 @@ LOGGING = {
     }
 }
 
-if not DEBUG:
+if DEBUG:
     LOGGING = None

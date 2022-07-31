@@ -1,16 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import Model
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AnonymousUser
+from django.urls import reverse
 
 from core.db_queries import Query
 from core import constants as const
 
-from .models import Result
+from .models import Python
 
 
-@cache_page(timeout=20, key_prefix='index')  # 10 minutes
-def index(request):
+# @cache_page(timeout=20, key_prefix='index')  # 10 minutes
+def index(request: HttpRequest):
     """Обработчик для главной страницы.
     """
     context = {
@@ -22,104 +26,112 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-@cache_page(timeout=60, key_prefix='rating')  # 1 minute
-def rating(request):
+# @cache_page(timeout=60, key_prefix='rating')  # 1 minute
+def rating(request: HttpRequest):
     """Показывает рейтинг пользователей.
     """
     context = {
         'title': const.TITLE,
         'header': const.ALL_RESULTS_CARD_HEADER,
-        'results': Query.get_users_ratings()
+        'results': Query.get_users_rating()
     }
     return render(request, 'questions/results.html', context)
 
 
 @login_required
-def my_results(request):
+def my_results(request: HttpRequest):
     """Показывает все результаты текущего пользователя.
     """
+    user: AbstractBaseUser | AnonymousUser = request.user
     context = {
         'title': const.TITLE,
         'header': const.MY_RESULTS_CARD_HEADER,
-        'results': Query.get_user_results(request.user.id)
+        'results': Query.get_user_results(user)
     }
     return render(request, 'questions/results.html', context)
 
 
 @login_required
 def get_question(
-    request, current_result=None, to_add_answer=True, error_message=None
+    request: HttpRequest,
+    subject: Model = Python
 ):
     """Выводит очередной вопрос и учитывает ответы.
     Если предыдущий тест был случайно прерван, продолжит предыдущий тест.
     """
-    next_question, current_result = Query.get_next_question(request.user.id, current_result)
-    print(next_question, '\n\n')
-
-    if not next_question:
-        return to_finish_test(request, current_result)
-
-    # Переход к обработке переданных ответов
-    if request.method == 'POST' and to_add_answer:
-        return add_answer(request, current_result, next_question.id)
-
+    user: AbstractBaseUser | AnonymousUser = request.user
+    next_question = Query.get_next_question(user)
     context = {
         'title': const.TITLE,
-        'question': next_question,
-        'button_type': ('radio', 'checkbox')[next_question.many_answers],
-        'error_message': error_message
+        'question': next_question
     }
+
+    if next_question is not None:
+        context['button_type'] = (
+            ('radio', 'checkbox')[next_question.many_answers]
+        )
+
+    if request.method == 'POST':
+        return add_answer(
+            request=request,
+            subject=subject,
+            context=context,
+            next_question=next_question
+
+        )
+
     return render(request, 'questions/question.html', context)
 
 
 @login_required
-def add_answer(request, result, question_id):
-    """Учитывает переданые пользователем ответы.
+def add_answer(
+    request: HttpRequest,
+    subject: Model,
+    context: dict,
+    next_question: Model | None = None
+):
+    """Учитывает переданные пользователем ответы.
     """
-    choice = request.POST.getlist('answer')
+    choice: list = request.POST.getlist('answer')
+
     if not choice:
-        return get_question(
-            request,
-            to_add_answer=False,
-            error_message=const.ERR_NO_ANSWERS
-        )
+        context['error_message'] = const.ERR_NO_ANSWERS
+        return render(request, 'questions/question.html', context)
 
-    if not Query.update_result(result, question_id, choice):
-        return get_question(
-            request,
-            to_add_answer=False,
-            error_message=const.ERR_FALSE_ANSWERS
-        )
+    if not Query.update_result(
+        user=request.user, choice=choice
+    ):
+        context['error_message'] = const.ERR_FALSE_ANSWERS
+        return render(request, 'questions/question.html', context)
 
-    return get_question(request, result, to_add_answer=False)
+    if next_question is None:
+        return to_finish_test(request=request)
+
+    return render(request, 'questions/question.html', context)
 
 
-# @login_required
-def to_finish_test(request, result=None):
+#@login_required
+def to_finish_test(
+    request: HttpRequest
+) -> HttpResponse | HttpResponseRedirect:
     """Завершает тест.
     Если пользователь не проходил тестов, либо пытается завершить без
     отмеченных ответов, перекидывает на главную страницу.
     Начатый тест будет продолжен в дальнейшем.
     """
-    if result is None:
-        result = Result.objects.values(
-            'score', username=F('users__username')
-        ).filter(
-            users=request.user
-        ).order_by('-id').first()
+    user: AbstractBaseUser | AnonymousUser = request.user
+    closed, current_result = Query.close_last_result(user)
 
-    if result is None or result.score is None:
-        return redirect('questions:index')
+    if not closed:
+        print('not closed')
+        return redirect(reverse('questions:index'))
 
-    if not result.finish_test_time:
-        Query.close_last_result(result)
-
-    if result.score < 0:
+    if current_result.score <= 0:
         return redirect(const.LOSE)
 
     context = {
         'title': const.TITLE,
         'header': const.FINISH_CARD_HEADER,
-        'result': result
+        'result': current_result
     }
     return render(request, 'questions/finish.html', context)
