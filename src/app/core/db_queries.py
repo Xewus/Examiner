@@ -1,12 +1,11 @@
-"""Запросы к БД.
+"""Запросы к БД и кэшу.
 """
 from datetime import datetime
 
-from django.core.cache import cache
-from django.db.models import F, Max, Q, Sum, QuerySet, Model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
-
+from django.core.cache import cache
+from django.db.models import F, Max, Model, Q, QuerySet, Sum
 from questions.models import Answer, Python, Result, User
 
 MAXIMUM_GRADE = 'maximum_grade'

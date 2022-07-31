@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
-from decouple import config, Csv
+from decouple import Csv, config
 
 APP_NAME = 'examiner'
 

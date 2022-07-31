@@ -1,14 +1,13 @@
-from django.contrib.auth.decorators import login_required
-from django.db.models import Model
-from django.shortcuts import redirect, render
-from django.views.decorators.cache import cache_page
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AnonymousUser
-from django.urls import reverse
-
-from core.db_queries import Query
 from core import constants as const
+from core.db_queries import Query
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
+from django.db.models import Model
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.views.decorators.cache import cache_page
 
 from .models import Python
 
