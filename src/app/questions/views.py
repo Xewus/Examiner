@@ -2,14 +2,10 @@ from core import constants as const
 from core.db_queries import Query
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
-from django.db.models import Model
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
-
-from .models import Python
 
 
 # @cache_page(timeout=20, key_prefix='index')  # 10 minutes
@@ -41,7 +37,7 @@ def rating(request: HttpRequest):
 def my_results(request: HttpRequest):
     """Показывает все результаты текущего пользователя.
     """
-    user: AbstractBaseUser | AnonymousUser = request.user
+    user: AbstractBaseUser = request.user
     context = {
         'title': const.TITLE,
         'header': const.MY_RESULTS_CARD_HEADER,
@@ -52,61 +48,59 @@ def my_results(request: HttpRequest):
 
 @login_required
 def get_question(
-    request: HttpRequest,
-    subject: Model = Python
+    request: HttpRequest
 ):
     """Выводит очередной вопрос и учитывает ответы.
     Если предыдущий тест был случайно прерван, продолжит предыдущий тест.
     """
-    user: AbstractBaseUser | AnonymousUser = request.user
-    next_question = Query.get_next_question(user)
+    user: AbstractBaseUser = request.user
+    question = Query.get_next_question(user=user)
+    if question is None:
+        return redirect(reverse('questions:finish_test'))
+
     context = {
         'title': const.TITLE,
-        'question': next_question
+        'question': question,
+        'button_type': ('radio', 'checkbox')[question.many_answers]
     }
-
-    if next_question is not None:
-        context['button_type'] = (
-            ('radio', 'checkbox')[next_question.many_answers]
-        )
-
-    if request.method == 'POST':
-        return add_answer(
-            request=request,
-            subject=subject,
-            context=context,
-            next_question=next_question
-
-        )
 
     return render(request, 'questions/question.html', context)
 
 
-@login_required
+# @login_required
 def add_answer(
     request: HttpRequest,
-    subject: Model,
-    context: dict,
-    next_question: Model | None = None
+    question_pk: int
 ):
     """Учитывает переданные пользователем ответы.
     """
-    choice: list = request.POST.getlist('answer')
+    question = Query.get_current_question(
+        question_pk=question_pk
+    )
+    if question is None:
+        raise
+
+    context = {
+        'title': const.TITLE,
+        'question': question,
+        'button_type': ('radio', 'checkbox')[question.many_answers]
+
+    }
+    choice = request.POST.getlist('answer')
 
     if not choice:
         context['error_message'] = const.ERR_NO_ANSWERS
         return render(request, 'questions/question.html', context)
 
     if not Query.update_result(
-        user=request.user, choice=choice
+        user=request.user,
+        question_pk=question_pk,
+        choice=choice
     ):
         context['error_message'] = const.ERR_FALSE_ANSWERS
         return render(request, 'questions/question.html', context)
 
-    if next_question is None:
-        return to_finish_test(request=request)
-
-    return render(request, 'questions/question.html', context)
+    return redirect(reverse('questions:questions'))
 
 
 #@login_required
@@ -118,15 +112,12 @@ def to_finish_test(
     отмеченных ответов, перекидывает на главную страницу.
     Начатый тест будет продолжен в дальнейшем.
     """
-    user: AbstractBaseUser | AnonymousUser = request.user
+    user: AbstractBaseUser = request.user
     closed, current_result = Query.close_last_result(user)
 
     if not closed:
         print('not closed')
         return redirect(reverse('questions:index'))
-
-    if current_result.score <= 0:
-        return redirect(const.LOSE)
 
     context = {
         'title': const.TITLE,

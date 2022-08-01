@@ -94,9 +94,9 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': BASE_DIR / f'{APP_NAME}.cache',
-        'TIMEOUT': None,
+        'TIMEOUT': 20,
         'OPTIONS': {
-            'MAX_ENTRIES': 50
+            'MAX_ENTRIES': 10
         }
     }
 }
@@ -152,10 +152,10 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
+    # 'root': {
+        # 'handlers': ['console'],
+        # 'level': 'WARNING',
+    # },
     'loggers': {
         'django.db.backends': {
             'level': 'DEBUG',
