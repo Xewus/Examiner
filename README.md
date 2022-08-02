@@ -13,7 +13,7 @@
 - [Poetry 1.1](https://python-poetry.org/docs/ " Управление зависимостями ")
 
 ***
-![Иллюстрация к проекту](https://github.com/Xewus/Examiner/blob/master/examiner.png)
+![Иллюстрация к проекту](https://github.com/Xewus/Examiner/blob/main/examiner.png)
 ***
 
 ### TODO
