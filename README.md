@@ -9,13 +9,13 @@
 - [Python 3.10](https://www.python.org/ "Язык разработки")
 - [Django 4.0](https://www.djangoproject.com/ "Фреймворк для веб-приложений")
 - [Daphne 3.0](https://pypi.org/project/daphne/ "ASGI-сервер для UNIX от Django")
-- [Pytest-django 4.5](https://pypi.org/project/pytest-django/ "Теститрует приложения Django с помощью  pytest.")
+- [Pytest-django 4.5](https://pypi.org/project/pytest-django/ "Теститрует приложения Django с помощью  pytest")
 - [Poetry 1.1](https://python-poetry.org/docs/ " Управление зависимостями ")
 
 ***
 
 ### TODO
-- Кэширование SQL-запросов.  
+- Кэширование страниц и SQL-запросов.  
 *Предполагается использование простейшего хостинга без доступа к установке дополнительных сервисов вроде `Redis` потому - кэш на файловой системе.*
 
 
@@ -26,6 +26,6 @@
 
 ***
 
-#### TODODO (Далёкие планы)
+#### TODODO (далёкие планы)
 - Добавить тестируемые предметы.
 - Добавить оценку времени (по-хорошему, тут нужен JS, а это не наше).
