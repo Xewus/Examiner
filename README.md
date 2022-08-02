@@ -10,6 +10,7 @@
 - [Django 4.0](https://www.djangoproject.com/ "Фреймворк для веб-приложений")
 - [Daphne 3.0](https://pypi.org/project/daphne/ "ASGI-сервер для UNIX от Django")
 - [Pytest-django 4.5](https://pypi.org/project/pytest-django/ "Теститрует приложения Django с помощью  pytest.")
+- [Poetry 1.1](https://python-poetry.org/docs/ " Управление зависимостями ")
 
 ***
 
