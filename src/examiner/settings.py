@@ -14,7 +14,7 @@ from pathlib import Path
 
 from decouple import Csv, config
 
-APP_NAME = config('APP_NAME', default='examiner')
+APP_NAME = config('APP_NAME', default='examiner').lower()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
 
-    'django_extensions',
     'django.db.backends'
 ]
 

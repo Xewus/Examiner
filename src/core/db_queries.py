@@ -4,7 +4,8 @@ from datetime import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db.models import F, Max, Model, Q, QuerySet, Sum
-from questions.models import Answer, Python, Result, User, Question
+
+from questions.models import Answer, Python, Question, Result, User
 
 
 class Query:
