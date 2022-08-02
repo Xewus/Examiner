@@ -67,7 +67,7 @@ def get_question(
     return render(request, 'questions/question.html', context)
 
 
-# @login_required
+@login_required
 def add_answer(
     request: HttpRequest,
     question_pk: int
@@ -103,7 +103,7 @@ def add_answer(
     return redirect(reverse('questions:questions'))
 
 
-#@login_required
+@login_required
 def to_finish_test(
     request: HttpRequest
 ) -> HttpResponse | HttpResponseRedirect:

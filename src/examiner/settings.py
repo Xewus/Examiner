@@ -14,7 +14,7 @@ from pathlib import Path
 
 from decouple import Csv, config
 
-APP_NAME = 'examiner'
+APP_NAME = config('APP_NAME', default='examiner')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='debug')
 
-DEBUG = config('DEBUG', default=1, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
@@ -152,10 +152,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    # 'root': {
-        # 'handlers': ['console'],
-        # 'level': 'WARNING',
-    # },
     'loggers': {
         'django.db.backends': {
             'level': 'DEBUG',
