@@ -33,3 +33,12 @@
 #### TODODO (*далёкие планы*)
 - Добавить тестируемые предметы.
 - Добавить оценку времени (по-хорошему, тут нужен JS, а это не наше).
+
+#### Directions
+> sudo mysql
+> CREATE DATABASE  examiner_db CHARACTER SET UTF8;
+> CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';
+> GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';
+
+Tnen will need use manage.py migrations
+

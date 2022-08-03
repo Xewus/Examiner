@@ -48,12 +48,11 @@ class TestAppSettings:
     def test_db_settings(self):
         default_db = settings.DATABASES['default']
 
-        assert default_db['ENGINE'] == (
-            'django.db.backends.sqlite3',
+        assert default_db['ENGINE'] == 'django.db.backends.mysql', (
             fail_messages.FAIL_DB_ENGINE
         )
         assert default_db['USER'], fail_messages.FAIL_DB_USER
-        assert default_db['DB_PASS'], fail_messages.FAIL_DB_PASSWORD
+        assert default_db['PASSWORD'], fail_messages.FAIL_DB_PASSWORD
         assert default_db['HOST'], fail_messages.FAIL_DB_HOST
 
     def test_cache_settings(self):

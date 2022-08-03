@@ -82,10 +82,13 @@ DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
         'NAME': config('DB_NAME', default='db.sqlite3'),
-        # 'USER': config('DB_USER', default=None),
-        # 'PASSWORD': config('DB_PASS', default=None),
-        # 'HOST': config('DB_HOST', default=None),
-        # 'PORT': config('DB_PORT', default=5432, cast=int)
+        'USER': config('DB_USER', ),
+        'PASSWORD': config('DB_PASS'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', cast=int),
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
 }
 
