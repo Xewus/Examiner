@@ -35,10 +35,29 @@
 - Добавить оценку времени (по-хорошему, тут нужен JS, а это не наше).
 
 #### Directions
-> sudo mysql
-> CREATE DATABASE  examiner_db CHARACTER SET UTF8;
-> CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';
-> GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';
+- Вход в **MySQL** (Устанавливается на сервер отдельно):
 
-Tnen will need use manage.py migrations
+`sudo mysql'
+
+- Создать БД для приложения:
+
+`CREATE DATABASE  examiner_db CHARACTER SET UTF8;`
+
+- Создать пользователя для подключения к БД под этим именем:
+
+`CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';`
+
+- Выдать права указанному пользователю на управление БД:
+
+`GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';`
+
+- Убрать возможность раздавать доступы (можно сделать при выдаче прав, но слишком длинно):
+
+`REVOKE GRANT OPTION ON examiner_db.* FROM 'examiner_user'@'localhost';`
+
+- Закрепить права:
+
+`FLUSH PRIVILEGES;`
+
+Далее используем стандартные минрационные команды Django.
 
