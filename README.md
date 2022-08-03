@@ -36,28 +36,30 @@
 
 #### Directions
 - Вход в **MySQL** (Устанавливается на сервер отдельно):
-
- > sudo mysql
-
+```
+ sudo mysql
+```
 - Создать БД для приложения:
-
-`CREATE DATABASE  examiner_db CHARACTER SET UTF8;`
-
+```
+CREATE DATABASE  examiner_db CHARACTER SET UTF8;
+```
 - Создать пользователя для подключения к БД под этим именем:
 
-`CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';`
-
+```
+CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';
+```
 - Выдать права указанному пользователю на управление БД:
-
-`GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';`
-
+```
+GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';
+```
 - Убрать возможность раздавать доступы (можно сделать при выдаче прав, но слишком длинно. И необязательно.):
 
-`REVOKE GRANT OPTION ON examiner_db.* FROM 'examiner_user'@'localhost';`
-
+```
+REVOKE GRANT OPTION ON examiner_db.* FROM 'examiner_user'@'localhost';
+```
 - Закрепить права:
-
-`FLUSH PRIVILEGES;`
-
+```
+FLUSH PRIVILEGES;
+```
 Далее используем стандартные минрационные команды Django.
 
