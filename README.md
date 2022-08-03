@@ -37,7 +37,7 @@
 #### Directions
 - Вход в **MySQL** (Устанавливается на сервер отдельно):
 
-`sudo mysql`
+ > sudo mysql
 
 - Создать БД для приложения:
 
@@ -51,7 +51,7 @@
 
 `GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';`
 
-- Убрать возможность раздавать доступы (можно сделать при выдаче прав, но слишком длинно):
+- Убрать возможность раздавать доступы (можно сделать при выдаче прав, но слишком длинно. И необязательно.):
 
 `REVOKE GRANT OPTION ON examiner_db.* FROM 'examiner_user'@'localhost';`
 
