@@ -80,8 +80,8 @@ WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': config('DB_NAME', default='db.sqlite3'),
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASS'),
         'HOST': config('DB_HOST'),
