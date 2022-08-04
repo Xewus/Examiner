@@ -3,34 +3,39 @@
 from datetime import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.db.models import F, Max, Model, Q, QuerySet, Sum
+from django.db.models import Max, Model, Q, QuerySet, Sum
+from django.core.cache import cache
 
 from questions.models import Answer, Python, Question, Result, User
+from . import constants as const
 
 
 class Query:
     """Сборник запросов к БД и кэшу.
     """
-    def get_all_questions_ids(model: Model = Python) -> set:
+    def get_all_questions_ids(subject: Model = Python) -> set:
         """Кэширует `id` всех вопросов по предмету.
         """
-        ids = None
+        ids = cache.get(const.CACHE_ALL_QS_IDS % subject)
 
         if ids is None:
-            ids = {i[0] for i in model.objects.values_list('pk')}
+            print('\n\n', 'NNNOOONN', '\n\n')
+            ids = {i[0] for i in subject.objects.values_list('pk')}
+            cache.set(const.CACHE_ALL_QS_IDS % subject, ids)
 
         return ids
 
     def get_maximum_grade() -> int:
         """Получет максимальный доступный балл.
         """
-        maximum_grade = None
+        maximum_grade = cache.get(const.CACHE_MAX_GRADE)
         if maximum_grade is None:
             maximum_grade = Answer.objects.filter(
                 grade__gt=0
             ).aggregate(
                 Sum('grade')
             )['grade__sum'] or 0
+            cache.set(const.CACHE_MAX_GRADE, maximum_grade, 60*60)
 
         return maximum_grade
 
@@ -46,33 +51,42 @@ class Query:
     def get_user_results(user: AbstractBaseUser) -> QuerySet:
         """Получает отсотрированные результаты пользователя.
         """
-        return User.objects.filter(
-            pk=user.pk
-        ).values(
-            'username',
-            score=F('results__score'),
-            finish_test_time=F('results__finish_test_time')
-        ).order_by('-results__finish_test_time')
+        return Result.objects.raw(
+            '''SELECT id, score, finish_test_time, "{user}" AS username
+            FROM questions_result
+            WHERE users_id={id}
+            ORDER BY finish_test_time DESC
+            '''.format_map({"user": user, "id": user.pk})
+        )
 
     def get_current_result(
         user: AbstractBaseUser,
-        create_new_resul: bool = True
+        create_new_result: bool = True
     ) -> Result | None:
         """Получает последний незакрытый тест либо создаёт новый.
         """
-        current_result = None
+        current_result = cache.get(
+            const.CACHE_CURRENT_RESULT_FOR_USER % user.pk
+        )
         if current_result is None:
+            print('\n\n', 'CCRRR', '\n\n')
             current_result = Result.objects.filter(
                 Q(users=user) & Q(finish_test_time=None)
-            ).select_related('users').last()
+            ).last()
+            cache.set(
+                const.CACHE_CURRENT_RESULT_FOR_USER % user.pk, current_result
+            )
 
         if current_result is not None:
             return current_result
 
-        if not create_new_resul:
+        if not create_new_result:
             return None
 
         current_result = Result.objects.create(users=user)
+        cache.set(
+            const.CACHE_CURRENT_RESULT_FOR_USER % user.pk, current_result
+        )
 
         return current_result
 
@@ -128,7 +142,7 @@ class Query:
         проставлением суммы набранных баллов.
         """
         current_result = Query.get_current_result(
-            user=user, create_new_resul=False
+            user=user, create_new_result=False
         )
         if current_result is None:
             return False, current_result
@@ -140,4 +154,5 @@ class Query:
         current_result.score = score
         current_result.finish_test_time = datetime.now()
         current_result.save()
+        cache.delete(const.CACHE_CURRENT_RESULT_FOR_USER % user.pk)
         return True, current_result

@@ -7,7 +7,7 @@ authors = ["Xewus <xewuss@yandex.ru>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 mysqlclient = "^2.1.1"
-Django = "^4.0.6"
+Django = "^4.1"
 uWSGI = "^2.0.20"
 python-decouple = "^3.6"
 daphne = "^3.0.2"
@@ -21,6 +21,7 @@ pytest-pythonpath = "^0.7.4"
 ipython = "^8.4.0"
 pytest-django = "^4.5.2"
 uwsgitop = "^0.11"
+django-debug-toolbar ="3.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

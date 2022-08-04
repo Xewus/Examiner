@@ -18,9 +18,7 @@
         height: 100vh;
       "
     ><!-- Background image -->
-      {% cache 3600 navbar %}  <!-- 1 hour-->
-        {% include 'includes/nav.html' %}
-      {% endcache %}
+      {% include 'includes/nav.html' %}
       <main>
         <div class="container">
           {% block header %}{% endblock header %}

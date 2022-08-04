@@ -9,10 +9,13 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import socket
 
 from pathlib import Path
 
 from decouple import Csv, config
+
+DEBUG = config('DEBUG1', default=True, cast=bool)
 
 APP_NAME = config('APP_NAME', default='examiner').lower()
 
@@ -22,8 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 SECRET_KEY = config('SECRET_KEY', default='debug')
-
-DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 
@@ -39,7 +40,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
 
-    'django.db.backends'
+    'django.db.backends',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +51,9 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = f'{APP_NAME}.urls'
@@ -75,9 +79,6 @@ TEMPLATES = [
 ASGI_APPLICATION = f'{APP_NAME}.asgi.application'
 WSGI_APPLICATION = f'{APP_NAME}.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
@@ -96,7 +97,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': BASE_DIR / f'{APP_NAME}.cache',
-        'TIMEOUT': 20,
+        'TIMEOUT': 30,
         'OPTIONS': {
             'MAX_ENTRIES': 10
         }
@@ -146,21 +147,23 @@ LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'questions:index'
 LOGOUT_REDIRECT_URL = 'https://www.youtube.com/watch?v=IA_evL-1F0w'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console', ],
-        },
-    }
-}
-
 if DEBUG:
-    LOGGING = None
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [
+        ip[: ip.rfind(".")] + ".1" for ip in ips
+    ] + ["127.0.0.1", "10.0.2.2"]
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django.db.backends': {
+                'level': 'DEBUG',
+                'handlers': ['console', ],
+            },
+        }
+    }

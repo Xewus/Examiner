@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
 
+from src.questions.models import Python
 from . import fail_messages
 
 User = get_user_model()
@@ -18,6 +19,7 @@ def test_user_create():
 
 @pytest.mark.django_db
 def test_question_create():
+    # assert Python.objects.count() == 0
     pass
 
 

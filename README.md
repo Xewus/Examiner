@@ -59,5 +59,9 @@ REVOKE GRANT OPTION ON examiner_db.* FROM 'examiner_user'@'localhost';
 ```
 FLUSH PRIVILEGES;
 ```
+- Покинуть **MySQL**:
+```
+quit
+```
 Далее используем стандартные минрационные команды Django.
 

@@ -55,7 +55,7 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "autobahn"
-version = "22.6.1"
+version = "22.7.1"
 description = "WebSocket client & server library, WAMP real-time framework"
 category = "main"
 optional = false
@@ -69,7 +69,7 @@ txaio = ">=21.2.1"
 [package.extras]
 all = ["zope.interface (>=5.2.0)", "twisted (>=20.3.0)", "attrs (>=20.3.0)", "python-snappy (>=0.6.0)", "msgpack (>=1.0.2)", "ujson (>=4.0.2)", "cbor2 (>=5.2.0)", "py-ubjson (>=0.16.1)", "flatbuffers (>=1.12)", "pyopenssl (>=20.0.1)", "service_identity (>=18.1.0)", "pynacl (>=1.4.0)", "pytrie (>=0.4.0)", "qrcode (>=7.3.1)", "cffi (>=1.14.5)", "argon2_cffi (>=20.1.0)", "passlib (>=1.7.4)", "xbr (>=21.2.1)", "click (>=8.1.2)", "zlmdb (>=21.2.1)", "web3 (>=5.29.0)", "rlp (>=2.0.1)", "py-eth-sig-utils (>=0.4.0)", "py-ecc (>=5.1.0)", "eth-abi (>=2.1.1)", "mnemonic (>=0.19)", "base58 (>=2.1.0)", "ecdsa (>=0.16.1)", "py-multihash (>=2.0.1)", "jinja2 (>=2.11.3)", "yapf (==0.29.0)", "spake2 (>=0.8)", "hkdf (>=0.0.3)", "PyGObject (>=3.40.0)"]
 compress = ["python-snappy (>=0.6.0)"]
-dev = ["awscli", "backports.tempfile (>=1.0)", "bumpversion (>=0.5.3)", "codecov (>=2.0.15)", "flake8 (>=3.5.0)", "humanize (>=0.5.1)", "passlib", "pep8-naming (>=0.3.3)", "pip (>=9.0.1)", "pyenchant (>=1.6.6)", "pyflakes (>=1.0.0)", "pyinstaller (>=4.2)", "pylint (>=1.9.2)", "pytest-aiohttp", "pytest-asyncio (>=0.14.0)", "pytest-runner (>=2.11.1)", "pytest (>=3.4.2)", "pyyaml (>=4.2b4)", "qualname", "sphinx-autoapi (>=1.7.0)", "sphinx (>=1.7.1)", "sphinx_rtd_theme (>=0.1.9)", "sphinxcontrib-images (>=0.9.1)", "tox-gh-actions (>=2.2.0)", "tox (>=2.9.1)", "twine (>=3.3.0)", "twisted (>=18.7.0)", "txaio (>=20.4.1)", "watchdog (>=0.8.3)", "wheel (>=0.36.2)", "yapf (==0.29.0)", "mypy (>=0.610)"]
+dev = ["awscli", "backports.tempfile (>=1.0)", "bumpversion (>=0.5.3)", "codecov (>=2.0.15)", "flake8 (<5)", "humanize (>=0.5.1)", "passlib", "pep8-naming (>=0.3.3)", "pip (>=9.0.1)", "pyenchant (>=1.6.6)", "pyflakes (>=1.0.0)", "pyinstaller (>=4.2)", "pylint (>=1.9.2)", "pytest-aiohttp", "pytest-asyncio (>=0.14.0)", "pytest-runner (>=2.11.1)", "pytest (>=3.4.2)", "pyyaml (>=4.2b4)", "qualname", "sphinx-autoapi (>=1.7.0)", "sphinx (>=1.7.1)", "sphinx_rtd_theme (>=0.1.9)", "sphinxcontrib-images (>=0.9.1)", "tox-gh-actions (>=2.2.0)", "tox (>=2.9.1)", "twine (>=3.3.0)", "twisted (>=18.7.0)", "txaio (>=20.4.1)", "watchdog (>=0.8.3)", "wheel (>=0.36.2)", "yapf (==0.29.0)", "mypy (>=0.610)"]
 encryption = ["pyopenssl (>=20.0.1)", "service_identity (>=18.1.0)", "pynacl (>=1.4.0)", "pytrie (>=0.4.0)", "qrcode (>=7.3.1)"]
 nvx = ["cffi (>=1.14.5)"]
 scram = ["cffi (>=1.14.5)", "argon2_cffi (>=20.1.0)", "passlib (>=1.7.4)"]
@@ -206,20 +206,32 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "django"
-version = "4.0.6"
+version = "4.1"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
 python-versions = ">=3.8"
 
 [package.dependencies]
-asgiref = ">=3.4.1,<4"
+asgiref = ">=3.5.2,<4"
 sqlparse = ">=0.2.2"
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-debug-toolbar"
+version = "3.5.0"
+description = "A configurable set of panels that display various debug information about the current request/response."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2"
+sqlparse = ">=0.2.0"
 
 [[package]]
 name = "django-extensions"
@@ -795,7 +807,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2ae8c10b7533046b1c34893871f8a99ab8b0d2b9996a4a071cca463a054ec069"
+content-hash = "b0246b7f2fd605c6032492cf98e4cc185125e70ffd02ec2c6654bc276f339224"
 
 [metadata.files]
 appnope = [
@@ -818,7 +830,7 @@ attrs = [
     {file = "attrs-22.1.0.tar.gz", hash = "sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6"},
 ]
 autobahn = [
-    {file = "autobahn-22.6.1.tar.gz", hash = "sha256:fb63e946d5c2dd0df680851e84e65624a494ce87c999f2a4944e4f2d81bf4498"},
+    {file = "autobahn-22.7.1.tar.gz", hash = "sha256:8b462ea2e6aad6b4dc0ed45fb800b6cbfeb0325e7fe6983907f122f2be4a1fe9"},
 ]
 automat = [
     {file = "Automat-20.2.0-py2.py3-none-any.whl", hash = "sha256:b6feb6455337df834f6c9962d6ccf771515b7d939bca142b29c20c2376bc6111"},
@@ -986,8 +998,12 @@ decorator = [
     {file = "decorator-5.1.1.tar.gz", hash = "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330"},
 ]
 django = [
-    {file = "Django-4.0.6-py3-none-any.whl", hash = "sha256:ca54ebedfcbc60d191391efbf02ba68fb52165b8bf6ccd6fe71f098cac1fe59e"},
-    {file = "Django-4.0.6.tar.gz", hash = "sha256:a67a793ff6827fd373555537dca0da293a63a316fe34cb7f367f898ccca3c3ae"},
+    {file = "Django-4.1-py3-none-any.whl", hash = "sha256:031ccb717782f6af83a0063a1957686e87cb4581ea61b47b3e9addf60687989a"},
+    {file = "Django-4.1.tar.gz", hash = "sha256:032f8a6fc7cf05ccd1214e4a2e21dfcd6a23b9d575c6573cacc8c67828dbe642"},
+]
+django-debug-toolbar = [
+    {file = "django-debug-toolbar-3.5.0.tar.gz", hash = "sha256:97965f2630692de316ea0c1ca5bfa81660d7ba13146dbc6be2059cf55b35d0e5"},
+    {file = "django_debug_toolbar-3.5.0-py3-none-any.whl", hash = "sha256:89a52128309eb4da12738801ff0c202d2ff8730d1c3225fac6acf630c303e661"},
 ]
 django-extensions = [
     {file = "django-extensions-3.2.0.tar.gz", hash = "sha256:7dc7cd1da50d83b76447a58f5d7e5c8e6cd83f21e9b7e5f97e6b644f4d4e21a6"},
