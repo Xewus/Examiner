@@ -53,7 +53,7 @@ CREATE USER 'examiner_user'@'localhost' IDENTIFIED BY 'password';
 ```
 - Выдать права указанному пользователю на управление БД:
 ```
-GRANT ALL PRIVILEGES ON examiner_db  TO 'examiner_user'@'localhost';
+GRANT ALL PRIVILEGES ON examiner_db.* TO 'examiner_user'@'localhost';
 ```
 - Убрать возможность раздавать доступы (можно сделать при выдаче прав, но слишком длинно. И необязательно.):
 
