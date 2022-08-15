@@ -43,6 +43,9 @@
 ```
 CREATE DATABASE  examiner_db CHARACTER SET UTF8;
 ```
+```
+USE examiner_db;
+```
 - Создать пользователя для подключения к БД под этим именем:
 
 ```
