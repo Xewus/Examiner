@@ -6,22 +6,20 @@ from subprocess import run
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-
-
 ENV_PATH = os.path.join(current_dir, 'src/')
-
-print('\nn', ENV_PATH, '\n\n')
 
 set_env_path = 'export PYTHONPATH=${PYTHONPATH}:%s' % ENV_PATH
 
+collect_stattic = f'python3 {ENV_PATH}/manage.py collectstatic --noinput'
 start_app = 'daphne examiner.asgi:application'
 
-command = f'{set_env_path} && {start_app}'
+start = f'{set_env_path} && {start_app}'
 
 output = str(run(('pytest'), capture_output=True).stdout)
 
 
 if not re.search('FAIL', output):
-    os.system(command=command)
+    os.system(command=collect_stattic)
+    os.system(command=start)
 else:
     print('Tests failed. App wasn`t started.')

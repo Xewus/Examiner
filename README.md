@@ -35,13 +35,37 @@
 ***
 
 #### Directions
+- Создать файл `.env` со следующим содержанием:
+```
+DB_ENGINE='django.db.backends.mysql'
+DB_NAME='examiner_db'
+DB_USER='examiner_user'
+DB_PASS='password'
+DB_HOST='localhost'
+DB_PORT=3306
+DJANGO_SUPERUSER_USERNAME='admin'
+DJANGO_SUPERUSER_EMAIL='admin@admin.admin'
+DJANGO_SUPERUSER_PASSWORD='pass'
+```
+Запустить скрипт создающий БД для приложения (также будет создан администратор сайта с указанными в файле `.env` параметрами):
+```
+. create_db.sh
+```
+Запустить скрипт стартующий приложение:
+```
+python3 start_app.py 
+```
+
+***
+### При желанни можно всё делать ручками. Например, команды для MySQL
+
 - Вход в **MySQL** (Устанавливается на сервер отдельно):
 ```
  sudo mysql
 ```
 - Создать БД для приложения:
 ```
-CREATE DATABASE  examiner_db CHARACTER SET UTF8;
+CREATE DATABASE examiner_db CHARACTER SET UTF8;
 ```
 ```
 USE examiner_db;
